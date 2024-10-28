@@ -1,6 +1,7 @@
 import psycopg2
 import psycopg2.extras
 import os
+import time
 
 conn = psycopg2.connect(database=os.getenv('database'), 
                         user=os.getenv('user'), 
@@ -33,11 +34,17 @@ def buscaImagemDimensoes(user):
     return myresult['foto_caminho']
 
 def criarTabelaUsers():
-    with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as mycursor:
-        mycursor.execute("""CREATE TABLE IF NOT EXISTS users (
-            codigo integer,
-            login text,
-            senha text,
-            foto_caminho text
-        );""")
-        myresult = mycursor.fetchone()
+    try:
+        with conn.cursor() as mycursor:
+            mycursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                codigo SERIAL PRIMARY KEY,
+                login TEXT NOT NULL,
+                senha TEXT NOT NULL,
+                foto_caminho TEXT
+            );""")
+            conn.commit()
+        return True
+    except Exception as e:
+        print(f"Erro ao criar tabela: {e}")
+        return False
