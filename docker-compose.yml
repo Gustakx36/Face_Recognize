@@ -1,0 +1,44 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: docker-front-face-recognize
+    image: docker-front-face-recognize
+    ports:
+      - 80:80
+    volumes:
+     - .:/usr/share/nginx/html
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: docker-back-face-recognize
+    image: docker-back-face-recognize
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    environment:
+      - database=company
+      - user=gustavo
+      - host=db
+      - password=senha123
+      - port=5432
+    volumes:
+      - .:/app
+  db:
+    image: postgres:15.3-alpine
+    container_name: banco-face-recognize
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_USER: gustavo
+      POSTGRES_DB: company
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    container_name: gerenciar-banco-face-recognize
+    ports: 
+      - 8080:8080

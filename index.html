@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Facial</title>
+    <script src="/src/static/js/jquery.js"></script>
+    <script defer="" src="/src/static/js/face-api.min.js"></script>
+    <script defer="" src="/src/static/js/script.js"></script>
+    <script src="/src/static/js/sweetAlert.js"></script>
+    <style>
+        body{
+            margin: 0;
+        }
+        video{
+            position: absolute;
+            border: 1px solid orange;
+            border-radius: 250px;
+            transition: all 0.3s ease-out;
+        }
+
+        canvas {
+          position: absolute;
+        }
+        #div1{
+          position: absolute;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100vh;
+          z-index: 2000;
+          background-color: rgba(54, 54, 54, 0.89);
+          opacity: 0;
+          transition: opacity 0.5s ease;
+        }
+        #div2{
+            z-index: 1000;
+            position: fixed;
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        #div3{
+            display: none;
+        }
+        #div4{
+            width: 20px;
+            height: 20px;
+            background-color: red;
+        }
+        #div5{
+            margin-top: 30%;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            background-color: #480ca8;
+        }
+
+        .formLogin {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 7px;
+            padding: 40px;
+            box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.4);
+            gap: 5px
+        }
+
+        .areaLogin img {
+            width: 420px;
+        }
+
+        .formLogin h1 {
+            padding: 0;
+            margin: 0;
+            font-weight: 500;
+            font-size: 2.3em;
+        }
+
+        .formLogin p {
+            display: inline-block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .formLogin input, #enviar {
+            padding: 15px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            margin-top: 5px;
+            border-radius: 4px;
+            transition: all linear 160ms;
+            outline: none;
+        }
+
+
+        .formLogin input:focus, #enviar {
+            border: 1px solid blue;
+        }
+
+        .formLogin label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .formLogin a {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+            transition: all linear 160ms;
+        }
+
+        .formLogin a:hover {
+            color: blue;
+        }
+
+        .btn {
+            background-color: blue;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            border: none !important;
+            transition: all linear 160ms;
+            cursor: pointer;
+            margin: 0 !important;
+
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background-color: #1501c5;
+
+        }
+
+        .btn:active{
+            transform: scale(0.99);
+            background-color: #3a26f0;
+
+        }
+
+        #enviar{
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            border: none !important;
+            transition: all linear 160ms;
+            cursor: pointer;
+            margin: 0 !important;
+            background-color: rgb(165, 179, 165);
+            pointer-events: none;
+        }
+        #enviar:hover {
+            transform: scale(1.05);
+            background-color: #02cc1d;
+        }
+        #enviar:active {
+            transform: scale(0.97);
+            background-color: #049604;
+        }
+        .contagem {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff80;
+            border: 0px solid;
+            border-radius: 12px;
+            margin: 0 10px 0 10px;
+        }
+        .enviando {
+            width: 90px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: green;
+            border: 0px solid;
+            border-radius: 12px;
+            margin: 0 10px 0 10px;
+        }
+        .pontilhado1, .pontilhado2, .pontilhado3 {
+            opacity: 0;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+        }
+        .pontilhado1 {
+            animation-name: pontilhado1;
+        }
+
+        .pontilhado2 {
+            animation-name: pontilhado2;
+        }
+
+        .pontilhado3 {
+            animation-name: pontilhado3;
+        }
+        .contagemTotal {
+            margin-bottom: 550px;
+            display: flex;
+        }
+        .swal2-container {
+            z-index: 10000;
+        }
+        .carregar {
+            width: 640px;
+            position: absolute;
+            height: 480px;
+            background: #80808073;
+            display: none;
+            border: 0px solid;
+            border-radius: 250px;
+            justify-content: center;
+            align-items: center;
+        }
+        .spin {
+            width: 70px;
+            height: 70px;
+            border: 3px solid;
+            border-radius: 50px;
+            border-bottom: solid 3px blue;
+            animation-name: spin;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+        }
+        @keyframes spin {
+            from {transform: rotate(0deg);}
+            to {transform: rotate(360deg);}
+        }
+        @keyframes pontilhado1 {
+            0%, 20% { opacity: 0; }
+            30%, 100% { opacity: 1; }
+        }
+        @keyframes pontilhado2 {
+            20%, 40% { opacity: 0; }
+            50%, 100% { opacity: 1; }
+        }
+        @keyframes pontilhado3 {
+            40%, 60% { opacity: 0; }
+            70%, 100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+  <div id="div1">
+      <div class="contagemTotal" id="contagemTotal"></div>
+      <video src="" id="video" width="640" height="480" preload="" autoplay="" loop="" muted=""></video>
+      <div class="carregar" id="carregar">
+          <div class="spin"></div>
+      </div>
+  </div>
+
+  <div id="div2">
+      <div class="formLogin">
+          <h1>Login</h1>
+          <p>Digite os seus dados de acesso no campo abaixo.</p>
+          <label for="user">Usuario</label>
+          <input id="user" type="text" placeholder="Digite seu usuario" autofocus="true">
+          <label for="password">Senha</label>
+          <input id="password" type="password" placeholder="Digite seu e-mail">
+          <input id="logar" type="button" value="Acessar" class="btn">
+      </div>
+  </div>
+
+  <div id="div3">
+      <canvas id="canvas2" width="400" height="370"></canvas>
+      <input type="file" id="fileI">
+  </div>
+
+</body>
+</html>
