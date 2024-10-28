@@ -188,7 +188,11 @@ function startVideo() {
   navigator.mediaDevices.getUserMedia({video: {}}) .then((stream)=> {
     video.srcObject = stream;
     videoStream = stream;
-  }, (err)=> console.error(err));
+  }, (err)=> Swal.fire({
+    title: 'Camera não identificada!',
+    icon: 'error',
+    confirmButtonText: 'OK'
+  }));
 }
 
 function stopVideo() {
