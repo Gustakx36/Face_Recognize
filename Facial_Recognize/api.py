@@ -10,6 +10,8 @@ app = Flask(__name__)
 CORS(app)
 validos = ['http://localhost']
 
+criarTabelaUsers()
+
 def validaOrigem(origem):
     if origem in validos:
          return True

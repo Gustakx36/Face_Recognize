@@ -31,3 +31,13 @@ def buscaImagemDimensoes(user):
         mycursor.execute("SELECT * FROM users WHERE login = %s", [user])
         myresult = mycursor.fetchone()
     return myresult['foto_caminho']
+
+def criarTabelaUsers():
+    with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as mycursor:
+        mycursor.execute("""CREATE TABLE IF NOT EXISTS users (
+            codigo integer,
+            login text,
+            senha text,
+            foto_caminho text
+        );""")
+        myresult = mycursor.fetchone()
