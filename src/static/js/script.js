@@ -1,6 +1,6 @@
 const video = document.getElementById('video');
 const videoDiv = document.getElementById('div1');
-const urlApi = 'http://localhost:5000'
+const urlApi = 'http://localhost:5000';
 let tipo = 0;
 let videoStream;
 
@@ -11,7 +11,7 @@ Promise.all([
 ]).then();
 
 $(window).resize(() => {
-  $('.contagemTotal').css('margin-bottom', `${($('video').height() * 550 / 480) + 20}px`);
+  $('.contagemTotal').css('margin-bottom', `${$('video').height() + 58}px`);
   $('.carregar').css('width', $('video').width()).css('height', $('video').height());
 });
 
@@ -44,7 +44,7 @@ video.addEventListener('play', async () => {
   const displaySize = { width: video.width, height: video.height };
   videoDiv.appendChild(canvas);
   faceapi.matchDimensions(canvas, displaySize);
-  $('.contagemTotal').css('margin-bottom', `${($('video').height() * 550 / 480) + 20}px`);
+  $('.contagemTotal').css('margin-bottom', `${$('video').height() + 58}px`);
   $('.carregar').css('width', $('video').width()).css('height', $('video').height());
   switch (tipo) {
     case 1:
