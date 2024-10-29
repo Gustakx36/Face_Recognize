@@ -8,20 +8,11 @@ from analiza import *
 
 app = Flask(__name__)
 CORS(app)
-validos = ['http://localhost']
 
 criarTabelaUsers()
 
-def validaOrigem(origem):
-    if origem in validos:
-         return True
-    else:
-         return False
-
 @app.route('/criarUsuario', methods=["POST"])
 def criarUsuario():
-    if(not validaOrigem(request.headers.get('Origin'))):
-        return json.dumps(), 500, {'ContentType': 'application/json'}
     files = request.files.getlist('file[]')
     caminhosImagens = []
     for img in files:
@@ -46,8 +37,6 @@ def criarUsuario():
 
 @app.route('/validarUsuario', methods=["POST"])
 def validarUsuario():
-    if(not validaOrigem(request.headers.get('Origin'))):
-        return json.dumps(), 500, {'ContentType': 'application/json'}
     img = request.files['file[]']
 
     img.save(f'Facial_Recognize/tempImg/{img.filename}')
@@ -60,8 +49,6 @@ def validarUsuario():
     
 @app.route('/login', methods=["GET"]) 
 def login():
-    if(not validaOrigem(request.headers.get('Origin'))):
-        return json.dumps(), 500, {'ContentType': 'application/json'}
     user = request.args.get('user')
     senha = request.args.get('senha')
     validacaoAcessoLogin = encontrarLogin(user)
