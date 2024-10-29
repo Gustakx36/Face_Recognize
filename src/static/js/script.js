@@ -1,5 +1,6 @@
 const video = document.getElementById('video');
 const videoDiv = document.getElementById('div1');
+const urlApi = 'http://localhost:5000'
 let tipo = 0;
 let videoStream;
 
@@ -15,7 +16,7 @@ $('#logar').on('click', async () => {
   if(user == '' || senha == '') return;
   const login = await $.ajax({
     type : 'GET',
-    url : 'http://localhost:5000/login?user='+user+'&senha='+senha,
+    url : `${urlApi}/login?user=${user}&senha=${senha}`,
     dataType : 'json',
     cache : false,
     processData : false,
@@ -94,7 +95,7 @@ async function fluxoLoginExistente(canvas, displaySize, user, senha) {
 
       await $.ajax({
         type: 'POST',
-        url: `http://localhost:5000/validarUsuario?user=${user}&senha=${senha}`,
+        url: `${urlApi}/validarUsuario?user=${user}&senha=${senha}`,
         dataType: 'json',
         data: dataImages,
         cache: false,
@@ -161,7 +162,7 @@ async function fluxoLoginNovo(canvas, displaySize, user, senha) {
 
       await $.ajax({
         type: 'POST',
-        url: `http://localhost:5000/criarUsuario?user=${user}&senha=${senha}`,
+        url: `${urlApi}/criarUsuario?user=${user}&senha=${senha}`,
         dataType: 'json',
         data: dataImages,
         cache: false,
