@@ -10,6 +10,11 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri('/src/models')
 ]).then();
 
+$(window).resize(() => {
+  $('.contagemTotal').css('margin-bottom', `${($('video').height() * 550 / 480) + 20}px`);
+  $('.carregar').css('width', $('video').width()).css('height', $('video').height());
+});
+
 $('#logar').on('click', async () => {
   const user = $('#user').val();
   const senha = $('#password').val();
@@ -39,7 +44,8 @@ video.addEventListener('play', async () => {
   const displaySize = { width: video.width, height: video.height };
   videoDiv.appendChild(canvas);
   faceapi.matchDimensions(canvas, displaySize);
-
+  $('.contagemTotal').css('margin-bottom', `${($('video').height() * 550 / 480) + 20}px`);
+  $('.carregar').css('width', $('video').width()).css('height', $('video').height());
   switch (tipo) {
     case 1:
       fluxoLoginExistente(canvas, displaySize, user, senha);

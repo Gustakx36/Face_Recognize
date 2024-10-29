@@ -17,8 +17,10 @@
             border: 1px solid orange;
             border-radius: 250px;
             transition: all 0.3s ease-out;
+            width: 95%;
+            max-width: 640px;
+            height: auto;
         }
-
         canvas {
           position: absolute;
         }
@@ -33,6 +35,7 @@
           background-color: rgba(54, 54, 54, 0.89);
           opacity: 0;
           transition: opacity 0.5s ease;
+          overflow: hidden;
         }
         #div2{
             z-index: 1000;
@@ -216,9 +219,7 @@
             z-index: 10000;
         }
         .carregar {
-            width: 640px;
             position: absolute;
-            height: 480px;
             background: #80808073;
             display: none;
             border: 0px solid;
